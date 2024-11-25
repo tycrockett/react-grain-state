@@ -1,6 +1,6 @@
 {
   "name": "react-nexus-state",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "description": "React global state management tool. Only rerender children subscribed to sections of the the global state.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
