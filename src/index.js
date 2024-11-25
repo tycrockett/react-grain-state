@@ -6,12 +6,12 @@ const createSelector = (path) => {
     return path.reduce((acc, key) => acc?.[key], obj);
   };
   selector.id = uuid.v4();
-  selector.path = path;
+  selector.link = path;
   return selector;
 };
 
 const dataSetter = (object, selector, newValue) => {
-  const path = selector.path;
+  const path = selector.link;
   if (!path) {
     throw new Error('Selector must have a "path" property for setting.');
   }
@@ -136,15 +136,15 @@ export const useNexus = (initialData) => {
 
   const setNexusWithSelector = (selector, newValue) => {
     dataSetter(state, selector, newValue);
-    listeners.current.notify(selector.path);
+    listeners.current.notify(selector.link);
   };
 
   const addListener = (selector, callback) => {
-    listeners.current.add(selector.path, callback);
+    listeners.current.add(selector.link, callback);
   };
 
   const removeListener = (selector, callback) => {
-    listeners.current.remove(selector.path, callback);
+    listeners.current.remove(selector.link, callback);
   };
 
   return {
@@ -162,12 +162,12 @@ export const useNexus = (initialData) => {
 
 export const useLink = (state, options = {}) => {
   const {
-    path = [],
+    link = [],
     initialData = null,
     subscribed = true,
     muted = false,
   } = options;
-  const selector = useRef(createSelector(path)).current;
+  const selector = useRef(createSelector(link)).current;
   const [data, setData] = useState(
     () => selector(state.current) || initialData
   );
@@ -207,7 +207,7 @@ export const useLink = (state, options = {}) => {
   }, [updateLinkFromNexus, subscribed]);
 
   const updateSelector = () => {
-    selector.current = createSelector(path);
+    selector.current = createSelector(link);
     updateLinkKey();
   };
 
